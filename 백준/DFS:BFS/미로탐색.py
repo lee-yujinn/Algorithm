@@ -7,7 +7,6 @@ dx = [-1,1,0,0]
 dy = [0,0,-1,1]
 
 def bfs(x,y):
-    count = 0
     queue = deque()
     queue.append((x,y))
     while queue:
@@ -22,7 +21,6 @@ def bfs(x,y):
             if graph[nx][ny] == 1:
                 graph[nx][ny] = graph[x][y]+1
                 queue.append((nx,ny))
-            print(graph)
     return graph[n-1][m-1]
 
 print(bfs(0,0))
