@@ -35,8 +35,6 @@ for i in graph:
     for j in i:
         if ch == False and j != 0:
             result = 1
-            end = True
-            break
         if j == 0:
             result = 0
             end = True
