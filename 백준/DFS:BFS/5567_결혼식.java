@@ -10,7 +10,7 @@ public class Main {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(bf.readLine());
         int m = Integer.parseInt(bf.readLine());
-        String[] inputs = bf.readLine().split(" ");
+        String[] inputs;
         graph = new ArrayList<ArrayList<Integer>>();
 
         visited = new boolean[n+1];
@@ -21,7 +21,7 @@ public class Main {
             graph.add(new ArrayList<Integer>());
         }
 
-        for(int i=0; i<m-1; i++){
+        for(int i=0; i<m; i++){
             inputs = bf.readLine().split(" ");
             int p1 = Integer.parseInt(inputs[0]);
             int p2 = Integer.parseInt(inputs[1]);
