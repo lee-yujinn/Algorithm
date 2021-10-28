@@ -8,17 +8,9 @@ def findmin():
         p = n[0].split("+")
         return sum(list(map(int,p)))
     else:
-        m, s = 0, 0
-        if "+" in n[0]:
-            s = sum(list(map(int,n[0].split("+"))))
-        else:
-            s = int(n[0])
+        m, s = 0, sum(list(map(int,n[0].split("+"))))
         for v in n[1:]:
-            if "+" in v:
-                l = v.split("+")
-                m += sum(list(map(int,l)))
-            else:
-                m += int(v)
+            m += sum(list(map(int,v.split("+"))))
         return s - m
 
 print(findmin())
