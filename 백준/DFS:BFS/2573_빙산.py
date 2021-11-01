@@ -1,88 +1,63 @@
-import sys
-from collections import deque
+import sys, copy
+from collections import  deque
 input = sys.stdin.readline
+sys.setrecursionlimit(300000)
+
+dx = [-1, 1, 0, 0]
+dy = [0, 0, 1, -1]
 
 queue = deque()
 
-dx = [-1,1,0,0]
-dy = [0,0,1,-1]
-
-#빙산 덩어리 개수 구하기
-def bfs(start_x,start_y,graph,visited):
-    queue.append((start_x,start_y))
-    visited[start_x][start_y] = True
+#빙산 개수
+def bfs(x,y):
+    queue.append((x,y))
+    visited[x][y] = True
     while queue:
-        x,y = queue.popleft()
+        x, y = queue.popleft()
         for i in range(4):
             nx = x + dx[i]
             ny = y + dy[i]
-            if 0 <= nx < n and 0 <= ny < m and visited[nx][ny] == False and graph[nx][ny] != 0:
+            if 0 <= nx < n and 0 <= ny < m and not visited[nx][ny] and g[nx][ny] != 0:
                 visited[nx][ny] = True
-                queue.append((nx, ny))
+                queue.append((nx,ny))
     return 1
 
-#바닷물 카운팅 하기
-def count(x,y):
-    if graph[x][y] == 0:
-        return 0
-    count = 0
-    for i in range(4):
-        nx = x + dx[i]
-        ny = y + dy[i]
-        if 0 <= nx < n and 0 <= ny < m and graph[nx][ny] == 0:
-            count += 1
-    return count
-
+#바닷물에 녹는
+def melt():
+    g2 = copy.deepcopy(g)
+    for i in range(n):
+        for j in range(m):
+            if g[i][j] != 0:
+                for i2 in range(4):
+                    nx = i + dx[i2]
+                    ny = j + dy[i2]
+                    if 0 <= nx < n and 0 <= ny < m:
+                        if g[nx][ny] == 0: g2[i][j] -= 1
+                        if g2[i][j] == 0: break
+    return g2
 
 n, m = map(int, input().split())
-graph = [] * n
 year = 0
-temp = [[0]*m for _ in range(n)]
+g = []
 
-for i in range(n):
-    graph.append(list(map(int, input().split())))
+for _ in range(n):
+    g.append(list(map(int, input().split())))
 
 while True:
-    cnt = 0
-    breakp = False
-    end = False
     visited = [[False] * m for _ in range(n)]
+    c = 0
 
     for i in range(n):
         for j in range(m):
-            if visited[i][j] == False and graph[i][j] != 0:
-                cnt += bfs(i, j, graph, visited)
+            if not visited[i][j] and g[i][j] != 0:
+                c += bfs(i, j)
 
-    y = year
-    for i in range(n):
-        for j in range(m):
-            if graph[i][j] == 0:
-                end = True
-                year = 0
-            else:
-                end = False
-                breakp = True
-                year = y
-                break
-        if breakp:
-            break
-
-
-    if end or cnt >= 2 or cnt == 0:
+    if c >= 2:
+        print(year)
+        break
+    if c == 0:
+        print(0)
         break
 
-    temp_graph = graph
-    
-    for i in range(n):
-        for j in range(m):
-            temp[i][j] = count(i,j)
-            if graph[i][j]-temp[i][j] < 0:
-                temp_graph[i][j] = 0
-            else:
-                temp_graph[i][j] -= temp[i][j]
-
-    graph = temp_graph
-
+    g = melt()
     year += 1
-
-print(year)
